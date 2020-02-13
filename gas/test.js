@@ -1,19 +1,16 @@
-function myClass(v) {
-  this.value = v;
-}
 
 function myFunction() {
-  Logger.log('Hello');
-  //Logger.log(AppLib.SpreadSheetDB);
-  //var db = new myClass(6)
-  var db = new AppLib.SpreadSheetDB({
-    source_url: "sheet_url",
-    sheetSpecs: {}
+  var db = new gsheetdb.SpreadSheetDB({
+    source_url: "",
+    sheetSpecs: {
+      author: ['idAuthor', 'name'],
+      book: ['idBook', 'name', 'idAuthor']
+    }
   });
-  //var table = db.from('author');
-  //Logger.log(table);
-  //var results = db.from('author').query.where("idAuthor", 1).getResultsJson();
+  var table = db.from('author');
+  Logger.log(table.query.toJSON());
+  // var results = db.from('author').query.where("idAuthor", 1).toJSON();
   //Logger.log(JSON.stringify(results));
-  var results = db.join("author", "book", "idBook").sWhere("idAuthor", 1).getResultsJson();
-  Logger.log(JSON.stringify(results));
+  // var results = db.join("book", "author", "idAuthor").dWhere("idAuthor", 1).toJSON();
+  // Logger.log(JSON.stringify(results));
 }

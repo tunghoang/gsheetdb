@@ -38,7 +38,11 @@ class ColumnNames {
     let row = []
     for (let c = 0; c < this.column_names.length; c++) {
       if (typeof rec[this.column_names[c]] !== 'undefined') {
-        row.push(rec[this.column_names[c]]);
+        if (typeof rec[this.column_names[c]] === 'string') {
+          row.push(rec[this.column_names[c]]);
+        } else {
+          row.push(JSON.stringify(rec[this.column_names[c]]));
+        }
       }
       else {
         row.push('');

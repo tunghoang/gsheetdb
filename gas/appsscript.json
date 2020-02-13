@@ -1,6 +1,16 @@
 {
   "timeZone": "Asia/Bangkok",
-  "dependencies": {
-  },
-  "exceptionLogging": "STACKDRIVER"
+  "dependencies": {"enabledAdvancedServices": [
+    {
+      "userSymbol": "Sheets",
+      "serviceId": "sheets",
+      "version": "v4"
+    }
+  ]},
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "oauthScopes": [
+    "profile",
+    "https://www.googleapis.com/auth/spreadsheets"
+  ]
 }

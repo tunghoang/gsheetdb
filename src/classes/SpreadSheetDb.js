@@ -23,8 +23,8 @@ class SpreadSheetDB {
       let sheets = this.spreadsheet.getSheets();
       for (let i = 0; i < sheets.length; i++) {
         let sheetName = sheets[i].getName();
-        if (sheetName === '_search_sheet') continue;
-        if (sheetName === '_query_sheet') continue;
+        if (sheetName.includes('_search_sheet')) continue;
+        if (sheetName.includes('_query_sheet')) continue;
         let sheetTable = new SpreadSheetTable({
           spreadsheet: this.spreadsheet,
           sheet: sheets[i],

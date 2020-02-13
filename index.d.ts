@@ -13,12 +13,13 @@ export class SpreadSheetDB {
 interface SpreadSheetJoint<T> {
   sWhere(): QueryBuilder<T>["where"];
   dWhere(): QueryBuilder<T>["where"];
-  getResultsJson(): T[];
+  toJSON(): T[];
 }
 interface SpreadSheetTable<T> {
   query: QueryBuilder<T>
   insert(record: T): boolean;
-  update(key: string, field: string, value: string): boolean;
+  update(key: string, field: string, value: any): boolean;
+  update(key: string, updateObject: {}): boolean;
   getLastRow(): T;
   getDataJSON(): T[];
 }
@@ -26,7 +27,7 @@ export class QueryBuilder<T> {
   select(...fields: string[]): QueryBuilder<T>;
   where(field: string, searchValue: any): QueryBuilder<T>;
   where(field: string, operator: string, searchValue: any): QueryBuilder<T>;
-  getResultsJson(): T[];
+  toJSON(): T[];
   orWhere: QueryBuilder<T>["where"];
 }
 

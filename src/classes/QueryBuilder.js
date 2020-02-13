@@ -51,6 +51,7 @@ class QueryBuilder {
     return 'SELECT ' + this.select_clause;
   }
   getWhereClause() {
+    if (!this.where_clause) return '';
     return 'WHERE ' + this.where_clause;
   }
   getQuery() {
@@ -58,26 +59,14 @@ class QueryBuilder {
   }
   runQuery() {
     let qry = this.getQuery();
-    console.log('runQuery qry', qry);
-    let hidden_sheet = createHiddenSheet(this.spreadsheet, '_query_sheet');
-
+    let hidden_sheet = createHiddenSheet(this.spreadsheet, this.sheet.getName() + '_query_sheet');
     let last_col_label = this.options.column_names.getLastColLabel();
-
-    console.log('runQuery last_col_label', last_col_label);
-
     let colref = "'" + this.sheet.getName() + "'!" + 'A' + ':' + last_col_label;
-
-    console.log('runQuery colref', colref);
-
-    let formula = `QUERY(${colref},${JSON.stringify(qry)}, 0)`;
-
-    console.log('runQuery formula', formula);
-
-    let rows = hidden_sheet.runQuery(formula, 'A1');
-
+    let formula = `QUERY(${colref},${JSON.stringify(qry)}, 1)`;
+    let rows = hidden_sheet.runQuery(formula, this.sheet.getLastRow());
     return rows;
   }
-  getResultsJson() {
+  toJSON() {
     return this.options.column_names.makeJson(this.runQuery());
   }
 
@@ -90,5 +79,18 @@ function make_value(val) {
   return val;
 }
 
+function getLastRow(range) {
+  let rowNum = 0;
+  let blank = false;
+  for (let row = 0; row < range.length; row++) {
+    if (range[row][0] === "" && !blank) {
+      rowNum = row;
+      blank = true;
+    } else if (range[row][0] !== "") {
+      blank = false;
+    };
+  };
+  return rowNum;
+};
 
 export default QueryBuilder;

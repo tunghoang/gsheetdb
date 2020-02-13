@@ -29,11 +29,11 @@ class SpreadsheetTable {
   }
 
   getLastColumn() {
-    return this.sheet.getDataRange().getLastColumn();
+    return this.sheet.getLastColumn();
   }
 
   getLastRow() {
-    return this.sheet.getDataRange().getLastRow();
+    return this.sheet.getLastRow();
   }
   /* get the First Row with column headings */
   getHeaderRow() {
@@ -79,8 +79,8 @@ class SpreadsheetTable {
 
     let formula = make_match_formula(id, column, this.sheet.getName());
 
-    let hidden_sheet = createHiddenSheet(this.spreadsheet, '_search_sheet');
-    let row = hidden_sheet.runFormula(formula, 'A1');
+    let hidden_sheet = createHiddenSheet(this.spreadsheet, this.sheet.getName() + '_search_sheet');
+    let row = hidden_sheet.runFormula(formula);
     return row;
   }
 
@@ -96,15 +96,30 @@ class SpreadsheetTable {
     return result;
   }
 
-  update(id, col_name, col_value) {
-    let row = this.findRowById(id);
-    let col = this.options.column_names.getColNumber(col_name);
-
-    if (row > 0 && col > 0) {
-      this.sheet.getRange(row, col).setValue(col_value);
+  update(id, arg1, arg2) {
+    const row = this.findRowById(id);
+    if (row < 1) return false;
+    if (typeof arg1 === 'string') {
+      const [colName, colValue] = [arg1, arg2];
+      const col = this.options.column_names.getColNumber(colName);
+      if (col < 1) return false;
+      if (colValue && typeof colValue !== 'string') {
+        colValue = JSON.stringify(colValue);
+      }
+      this.sheet.getRange(row, col, 1).setValue(colValue);
       return true;
+    } else {
+      const obj = arg1;
+      const rowVal = this.findRowById(id);
+      for (const key in obj) {
+        const col = this.options.column_names.getColNumber(key);
+        if (obj[key] && typeof (obj[key]) !== 'string') {
+          obj[key] = JSON.stringify(obj[key]);
+        }
+        rowVal[col] = obj[key];
+      }
+      this.sheet.getRange(row, 0, 1).setValues(rowVal)
     }
-    return false;
   }
   insert(rec) {
     let row = this.options.column_names.jsonToRow(rec);

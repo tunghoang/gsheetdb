@@ -12,14 +12,14 @@ class HiddenSheet {
     this.sheet.hideSheet();
     return this;
   }
-  runFormula(formula, cell_addr) {
-    this.sheet.getRange(cell_addr).setFormula('=' + formula);
+  runFormula(formula) {
+    this.sheet.getRange('A1').setFormula('=' + formula);
 
-    return this.sheet.getRange(cell_addr).getValue();
+    return this.sheet.getRange('A1').getValue();
   }
-  runQuery(formula, cell_addr) {
-    this.sheet.getRange(cell_addr).setFormula('=' + formula);
-    return this.sheet.getDataRange().getValues();
+  runQuery(formula, numRows) {
+    this.sheet.getRange('A1').setFormula('=' + formula);
+    return this.sheet.getRange(2, 1, (numRows || this.sheet.getLastRow()) - 1, this.sheet.getLastColumn()).getValues();
   }
 }
 

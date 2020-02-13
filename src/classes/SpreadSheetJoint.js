@@ -17,18 +17,18 @@ class SpreadSheetJoint {
     this.destTable.query.where(col_name, cmp, value);
     return this;
   }
-  getResultsJson() {
+  toJSON() {
     let self = this;
     let results = [];
-    let sResults = this.sourceTable.query.getResultsJson();
-    let dResults = this.destTable.query.getResultsJson();
+    let sResults = this.sourceTable.query.toJSON();
+    let dResults = this.destTable.query.toJSON();
     for (let sRecord of sResults) {
       let foreignKeyValue = sRecord[this.keyName];
       let dRecord = dResults.find(function (obj) {
         return obj[self.keyName] === foreignKeyValue;
       });
       if (dRecord) {
-        results.push(Object.assign(sRecord, dRecord));
+        results.push(Object.assign(sRecord, { [this.destTable.sheet.getName()]: dRecord }));
       }
     }
     return results;
