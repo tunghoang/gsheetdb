@@ -1,5 +1,4 @@
 'use strict';
-
 import { createHiddenSheet } from './HiddenSheet';
 import ColumnNames from './ColumnNames';
 import QueryBuilder from './QueryBuilder';

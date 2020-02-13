@@ -1,7 +1,5 @@
 'use strict';
-
 import { createHiddenSheet } from './HiddenSheet';
-import ColumnNames from './ColumnNames';
 
 class QueryBuilder {
   constructor(options, spreadsheet, sheet) {

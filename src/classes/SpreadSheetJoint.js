@@ -1,6 +1,4 @@
 'use strict';
-'use strict';
-
 import { createHiddenSheet } from './HiddenSheet';
 import ColumnNames from './ColumnNames';
 import QueryBuilder from './QueryBuilder';
@@ -37,4 +35,3 @@ class SpreadSheetJoint {
   }
 }
 export default SpreadSheetJoint;
-

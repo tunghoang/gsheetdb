@@ -1,5 +1,4 @@
 'use strict';
-
 import SpreadSheetTable from './SpreadSheetTable';
 import SpreadSheetJoint from './SpreadSheetJoint';
 
