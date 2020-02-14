@@ -39,6 +39,9 @@ class SpreadsheetTable {
   getHeaderRow() {
     return this.getRowValues(this.options.header_row);
   }
+  getIdProp() {
+    return this.sheet.getRange(this.options.id_column + this.options.header_row).getValue();
+  }
   getRowValues(row) {
     try {
       var range = this.sheet.getRange(row, 1, 1, this.getLastColumn());

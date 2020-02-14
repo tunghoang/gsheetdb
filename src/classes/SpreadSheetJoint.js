@@ -9,6 +9,8 @@ class SpreadSheetJoint {
     this.destTable = destTable;
     this.keyName = keyName;
     this.joinProp = joinProp;
+    this.destIdProp = this.destTable.getIdProp();
+    this.destTableName = this.destTable.sheet.getName();
   }
   sWhere(col_name, cmp, value) {
     this.sourceTable.query.where(col_name, cmp, value);
@@ -19,17 +21,15 @@ class SpreadSheetJoint {
     return this;
   }
   toJSON() {
-    let self = this;
     let results = [];
     let sResults = this.sourceTable.query.toJSON();
     let dResults = this.destTable.query.toJSON();
     for (let sRecord of sResults) {
       let foreignKeyValue = sRecord[this.keyName];
-      let dRecord = dResults.find(function (obj) {
-        return obj[self.keyName] === foreignKeyValue;
-      });
+
+      let dRecord = dResults.find((obj) => obj[this.destIdProp] === foreignKeyValue);
       if (dRecord) {
-        results.push(Object.assign(sRecord, { [self.joinProp || this.destTable.sheet.getName()]: dRecord }));
+        results.push(Object.assign(sRecord, { [this.joinProp || this.destTableName]: dRecord }));
       }
     }
     return results;
