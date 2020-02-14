@@ -114,6 +114,7 @@ class SpreadsheetTable {
     }
   }
   insert(rec) {
+    if (!rec) throw 'Nothing to insert';
     let row = this.options.column_names.jsonToRow(rec);
     this.sheet.appendRow(row);
     return true;

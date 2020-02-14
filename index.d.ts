@@ -11,8 +11,8 @@ export class SpreadSheetDB {
   join<LT = any, RT = any>(leftSheet: string, rightSheet: string, keyName: string): SpreadSheetJoint<LT, RT>;
 }
 interface SpreadSheetJoint<LT, RT> {
-  sWhere(): QueryBuilder<LT>["where"];
-  dWhere(): QueryBuilder<RT>["where"];
+  sWhere: QueryBuilder<LT>["where"];
+  dWhere: QueryBuilder<RT>["where"];
   toJSON(): any[];
 }
 interface SpreadSheetTable<T> {

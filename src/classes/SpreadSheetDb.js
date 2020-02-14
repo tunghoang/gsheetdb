@@ -41,8 +41,8 @@ class SpreadSheetDB {
     return this.sheetTables[sheetName];
   }
 
-  join(sheetName1, sheetName2, keyName) {
-    return new SpreadSheetJoint(this.sheetTables[sheetName1], this.sheetTables[sheetName2], keyName);
+  join(sheetName1, sheetName2, joinKey, joinProp) {
+    return new SpreadSheetJoint(this.sheetTables[sheetName1], this.sheetTables[sheetName2], joinKey, joinProp);
   }
 }
 export default SpreadSheetDB;

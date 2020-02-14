@@ -4,10 +4,11 @@ import ColumnNames from './ColumnNames';
 import QueryBuilder from './QueryBuilder';
 
 class SpreadSheetJoint {
-  constructor(sourceTable, destTable, keyName) {
+  constructor(sourceTable, destTable, keyName, joinProp) {
     this.sourceTable = sourceTable;
     this.destTable = destTable;
     this.keyName = keyName;
+    this.joinProp = joinProp;
   }
   sWhere(col_name, cmp, value) {
     this.sourceTable.query.where(col_name, cmp, value);
@@ -28,7 +29,7 @@ class SpreadSheetJoint {
         return obj[self.keyName] === foreignKeyValue;
       });
       if (dRecord) {
-        results.push(Object.assign(sRecord, { [this.destTable.sheet.getName()]: dRecord }));
+        results.push(Object.assign(sRecord, { [self.joinProp || this.destTable.sheet.getName()]: dRecord }));
       }
     }
     return results;
