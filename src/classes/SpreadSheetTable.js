@@ -56,22 +56,14 @@ class SpreadsheetTable {
 	 */
   getDataJSON(range = null) {
     let datamx = [];
-    let start = 0;
     if (!range) {
       datamx = this.sheet.getDataRange().getValues();
-      start = this.options.header_row;
     }
     else {
       datamx = this.sheet.getRange(range).getValues();
     }
 
-    return (this.options.column_names.makeJson(datamx));
-		/*let ret=[];
-		for(let row= start; row<datamx.length; row++)
-		{
-			ret.push(this.options.column_names.makeJson(datamx[row]) );
-		}
-		return ret;*/
+    return (this.options.column_names.makeJson(datamx, 1));
   }
 
   findRowById(id) {
