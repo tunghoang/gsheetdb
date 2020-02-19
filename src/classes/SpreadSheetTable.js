@@ -98,22 +98,22 @@ class SpreadsheetTable {
       const [colName, colValue] = [arg1, arg2];
       const col = this.options.column_names.getColNumber(colName);
       if (col < 1) return false;
-      if (colValue && typeof colValue !== 'string') {
+      if (hasValue(colValue) && typeof colValue !== 'string') {
         colValue = JSON.stringify(colValue);
       }
       this.sheet.getRange(row, col, 1).setValue(colValue);
       return true;
     } else {
       const obj = arg1;
-      const rowVal = this.findRowById(id);
+      const rowVal = this.getRowValues(row);
       for (const key in obj) {
         const col = this.options.column_names.getColNumber(key);
-        if (obj[key] && typeof (obj[key]) !== 'string') {
+        if (hasValue(obj[key]) && typeof (obj[key]) !== 'string') {
           obj[key] = JSON.stringify(obj[key]);
         }
-        rowVal[col] = obj[key];
+        rowVal[col - 1] = obj[key];
       }
-      this.sheet.getRange(row, 0, 1).setValues(rowVal)
+      this.sheet.getRange(row, 1, 1, this.getLastColumn()).setValues([rowVal])
     }
   }
   insert(rec) {
@@ -123,6 +123,10 @@ class SpreadsheetTable {
     return true;
   }
 
+}
+
+function hasValue(value) {
+  return value || (value !== undefined && value !== null)
 }
 
 export function make_match_formula(needle, col, sheet_name) {
