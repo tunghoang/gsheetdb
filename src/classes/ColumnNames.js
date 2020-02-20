@@ -13,6 +13,7 @@ class ColumnNames {
     return 0;
   }
   makeJsonOneRow(row) {
+    if (!row.some(v => v !== '')) return null;
     let rec = {};
     for (let col = 0; col < row.length; col++) {
       rec[this.column_names[col]] = row[col];
@@ -21,6 +22,7 @@ class ColumnNames {
   }
   makeJson(datamx, start = 0) {
     let ret = [];
+    console.log(datamx);
     for (let row = start; row < datamx.length; row++) {
       ret.push(this.makeJsonOneRow(datamx[row]));
     }

@@ -13,7 +13,7 @@ export class SpreadSheetDB {
 interface SpreadSheetJoint<LT, RT> {
   sWhere: QueryBuilder<LT>["where"];
   dWhere: QueryBuilder<RT>["where"];
-  toJSON(): any[];
+  toJSON(numRecords?: number): any[];
 }
 interface SpreadSheetTable<T> {
   query: QueryBuilder<T>
@@ -28,7 +28,7 @@ export class QueryBuilder<T> {
   select(...fields: string[]): QueryBuilder<T>;
   where(field: string, searchValue: any): QueryBuilder<T>;
   where(field: string, operator: string, searchValue: any): QueryBuilder<T>;
-  toJSON(): T[];
+  toJSON(numRecords?: number): T[];
   orWhere: QueryBuilder<T>["where"];
 }
 

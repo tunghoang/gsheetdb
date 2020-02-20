@@ -20,8 +20,8 @@ class SpreadSheetJoint {
     this.destTable.query.where(col_name, cmp, value);
     return this;
   }
-  toJSON() {
-    let sResults = this.sourceTable.query.toJSON();
+  toJSON(numRecords) {
+    let sResults = this.sourceTable.query.toJSON(numRecords);
     let dResults = this.destTable.query.toJSON();
     if (!dResults || !dResults.length) return sResults;
     for (let sRecord of sResults) {
