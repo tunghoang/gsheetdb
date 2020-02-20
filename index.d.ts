@@ -20,6 +20,7 @@ interface SpreadSheetTable<T> {
   insert(record: T): boolean;
   update(key: string, field: string, value: any): boolean;
   update(key: string, updateObject: {}): boolean;
+  delete(key: string): boolean;
   getLastRow(): T;
   getDataJSON(): T[];
 }

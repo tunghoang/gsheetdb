@@ -102,12 +102,12 @@ class SpreadsheetTable {
         colValue = JSON.stringify(colValue);
       }
       this.sheet.getRange(row, col, 1).setValue(colValue);
-      return true;
     } else {
       const obj = arg1;
       const rowVal = this.getRowValues(row);
       for (const key in obj) {
         const col = this.options.column_names.getColNumber(key);
+        if (col < 1) return false;
         if (hasValue(obj[key]) && typeof (obj[key]) !== 'string') {
           obj[key] = JSON.stringify(obj[key]);
         }
@@ -115,6 +115,7 @@ class SpreadsheetTable {
       }
       this.sheet.getRange(row, 1, 1, this.getLastColumn()).setValues([rowVal])
     }
+    return true;
   }
   insert(rec) {
     if (!rec) throw 'Nothing to insert';
@@ -123,6 +124,12 @@ class SpreadsheetTable {
     return true;
   }
 
+  delete(id) {
+    const row = this.findRowById(id);
+    if (row < 1) return false;
+    this.sheet.deleteRow(row);
+    return true;
+  }
 }
 
 function hasValue(value) {
