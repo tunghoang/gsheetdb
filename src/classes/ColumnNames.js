@@ -22,9 +22,9 @@ class ColumnNames {
   }
   makeJson(datamx, start = 0) {
     let ret = [];
-    console.log(datamx);
     for (let row = start; row < datamx.length; row++) {
-      ret.push(this.makeJsonOneRow(datamx[row]));
+      const rowJson = this.makeJsonOneRow(datamx[row]);
+      if (rowJson) ret.push(rowJson);
     }
     return ret;
   }

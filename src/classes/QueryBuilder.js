@@ -8,6 +8,7 @@ class QueryBuilder {
     this.options = options;
     this.select_clause = '';
     this.where_clause = '';
+    this.rawQuery = '';
   }
   select() {
     for (let i = 0; i < arguments.length; i++) {
@@ -55,6 +56,7 @@ class QueryBuilder {
     return 'WHERE ' + this.where_clause;
   }
   getQuery() {
+    if (this.rawQuery) return this.rawQuery;
     return this.getSelectClause() + ' ' + this.getWhereClause();
   }
   runQuery(numRows) {
@@ -69,7 +71,9 @@ class QueryBuilder {
   toJSON(numRecords) {
     return this.options.column_names.makeJson(this.runQuery(numRecords));
   }
-
+  raw(query) {
+    this.rawQuery = query;
+  }
 };
 
 function make_value(val) {
