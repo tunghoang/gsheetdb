@@ -19,7 +19,7 @@ class HiddenSheet {
   }
   runQuery(formula, numRows) {
     this.sheet.getRange('A1').setFormula('=' + formula);
-    return this.sheet.getRange(2, 1, numRows || (this.sheet.getLastRow() - 1), this.sheet.getLastColumn()).getValues();
+    return this.sheet.getRange(2, 1, Math.max(1, numRows || (this.sheet.getLastRow() - 1)), this.sheet.getLastColumn()).getValues();
   }
 }
 
