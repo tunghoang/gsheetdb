@@ -12,35 +12,35 @@ class QueryBuilder {
   }
   select() {
     for (let i = 0; i < arguments.length; i++) {
-      this.select_clause += this._col_label(arguments[i]) + ',';
+      this.select_clause += this.getColId(arguments[i]) + ',';
     }
     return this;
   }
-  where(col_name, cmp, value) {
+  where(col_name, cmp, value, raw) {
     if (typeof value === 'undefined') {
       value = cmp;
       cmp = '=';
     }
-    this._append_where(col_name, cmp, value, 'AND');
+    this._append_where(col_name, cmp, value, 'AND', raw);
 
     return this;
   }
-  orWhere(col_name, cmp, value) {
+  orWhere(col_name, cmp, value, raw) {
     if (typeof value === 'undefined') {
       value = cmp;
       cmp = '=';
     }
-    this._append_where(col_name, cmp, value, 'OR');
+    this._append_where(col_name, cmp, value, 'OR', raw);
     return this;
   }
-  _append_where(col_name, cmp, value, combine) {
+  _append_where(col_name, cmp, value, combine, raw) {
     if (this.where_clause.length > 0) {
       this.where_clause += ' ' + combine + ' ';
     }
-    this.where_clause += this._col_label(col_name) + cmp + make_value(value);
+    this.where_clause += this.getColId(col_name) + ' ' + (raw ? raw : cmp + make_value(value));
   }
-  _col_label(col_name) {
-    return this.options.column_names.getColLabel(col_name);
+  getColId(colName) {
+    return this.options.column_names.getColLabel(colName);
   }
   getSelectClause() {
     if (!this.select_clause || this.select_clause.length <= 0) {
@@ -56,15 +56,14 @@ class QueryBuilder {
     return 'WHERE ' + this.where_clause;
   }
   getQuery() {
-    if (this.rawQuery) return this.rawQuery;
     return this.getSelectClause() + ' ' + this.getWhereClause();
   }
   runQuery(numRows) {
-    let qry = this.getQuery();
+    let qry = this.rawQuery ? `"${this.rawQuery}"` : JSON.stringify(this.getQuery());
     let hidden_sheet = createHiddenSheet(this.spreadsheet, this.sheet.getName() + '_query_sheet');
     let last_col_label = this.options.column_names.getLastColLabel();
     let colref = "'" + this.sheet.getName() + "'!" + 'A' + ':' + last_col_label;
-    let formula = `QUERY(${colref},${JSON.stringify(qry)}, 1)`;
+    let formula = `QUERY(${colref},${qry}, 1)`;
     let rows = hidden_sheet.runQuery(formula, numRows || (this.sheet.getLastRow() - 1));
     return rows;
   }
@@ -73,6 +72,7 @@ class QueryBuilder {
   }
   raw(query) {
     this.rawQuery = query;
+    return this;
   }
 };
 
