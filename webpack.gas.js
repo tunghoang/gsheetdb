@@ -3,14 +3,15 @@ var path = require('path');
 module.exports = {
   mode: 'development',
   entry: {
-    gsheetdb: './src/gsheetdb.js'
+    gsheetdb: './index.js'
   },
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
-    libraryTarget: 'var',
+    libraryTarget: 'global',
     library: 'gsheetdb'
   },
+  target: 'node',
   module: {
     rules: [
       {

@@ -8,8 +8,8 @@ class HiddenSheet {
     if (!this.sheet) {
       this.sheet = spreadsheet.insertSheet();
       this.sheet.setName(name);
+      this.sheet.hideSheet();
     }
-    this.sheet.hideSheet();
     return this;
   }
   runFormula(formula) {

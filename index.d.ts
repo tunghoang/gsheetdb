@@ -1,9 +1,10 @@
 interface SpreadSheetDBOptions {
   source_url: string,
-  sheetSpecs: object,
+  sheetSpecs?: object,
   header_row?: number
   id_column?: string,
   column_names?: Array<string>,
+  init?: boolean,
 }
 export class SpreadSheetDB {
   constructor(options: SpreadSheetDBOptions);

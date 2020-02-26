@@ -107,7 +107,7 @@ class SpreadsheetTable {
       const rowVal = this.getRowValues(row);
       for (const key in obj) {
         const col = this.options.column_names.getColNumber(key);
-        if (col < 1) return false;
+        if (col < 1) continue;
         if (hasValue(obj[key]) && typeof (obj[key]) !== 'string') {
           obj[key] = JSON.stringify(obj[key]);
         }
