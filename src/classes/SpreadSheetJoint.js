@@ -26,20 +26,20 @@ class SpreadSheetJoint {
     return this;
   }
   toJSON(numRecords) {
-    let sResults = this.sourceTable.query.toJSON(numRecords);
-    let dResults = this.destTable.query.toJSON();
+    const results = [];
+    const sResults = this.sourceTable.query.toJSON(numRecords);
+    const dResults = this.destTable.query.toJSON();
     if (!dResults || !dResults.length) {
       if (this.type === 'left') return sResults;
-      else return [];
+      else return results;
     }
     for (let sRecord of sResults) {
-      let foreignKeyValue = sRecord[this.keyName];
-
-      let dRecord = dResults.find((obj) => obj[this.destIdProp] === foreignKeyValue);
+      const foreignKeyValue = sRecord[this.keyName];
+      const dRecord = dResults.find((obj) => obj[this.destIdProp] === foreignKeyValue);
       if (this.type === 'inner' && !dRecord) continue;
-      Object.assign(sRecord, { [this.joinProp || this.destTableName]: dRecord });
+      results.push(Object.assign(sRecord, { [this.joinProp || this.destTableName]: dRecord }));
     }
-    return sResults;
+    return results;
   }
 }
 export default SpreadSheetJoint;
