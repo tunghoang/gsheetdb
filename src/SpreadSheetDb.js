@@ -1,6 +1,7 @@
 'use strict';
-import SpreadSheetTable from './SpreadSheetTable';
+import SpreadSheetApp from './SpreadSheetApp';
 import SpreadSheetJoint from './SpreadSheetJoint';
+import SpreadSheetTable from './SpreadSheetTable';
 
 class SpreadSheetDB {
   constructor(options) {
@@ -10,7 +11,7 @@ class SpreadSheetDB {
     this.defaults = {
       header_row: 1,
       id_column: 'A',
-      source_url: null,
+      spreadsheetId: null,
       sheetSpecs: {},
       init: null,
     }
@@ -19,18 +20,17 @@ class SpreadSheetDB {
 
   open(options) {
     Object.assign(this.options, this.defaults, options);
-    if (this.options.source_url) {
-      this.spreadsheet = SpreadsheetApp.openByUrl(this.options.source_url);
-    }
+    if (!this.options.spreadsheetId) return;
     let init = this.options.init;
     if (typeof init !== 'boolean') {
       const scriptCache = CacheService.getScriptCache();
-      init = JSON.parse(scriptCache.get('init' + this.options.source_url));
+      init = JSON.parse(scriptCache.get('init' + this.options.spreadsheetId));
       if (typeof init !== 'boolean') {
         init = true;
-        scriptCache.put('init' + this.options.source_url, 'true');
+        scriptCache.put('init' + this.options.spreadsheetId, 'true');
       }
     }
+    this.spreadsheet = new SpreadSheetApp(this.options.accessToken).openById(this.options.spreadsheetId, init);
     if (!init || !this.spreadsheet) return;
     console.log('spreadsheet reinit');
     let sheetNames = this.spreadsheet.getSheets().map(s => s.getName());
@@ -46,7 +46,7 @@ class SpreadSheetDB {
         newSheet.appendRow(sheetSpec);
       }
     }
-    CacheService.getScriptCache().put('init' + this.options.source_url, 'false', 21600);
+    CacheService.getScriptCache().put('init' + this.options.spreadsheetId, 'false', 21600);
   }
 
   from(sheetName) {

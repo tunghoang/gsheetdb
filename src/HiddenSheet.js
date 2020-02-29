@@ -6,8 +6,7 @@ class HiddenSheet {
   create(spreadsheet, name) {
     this.sheet = spreadsheet.getSheetByName(name);
     if (!this.sheet) {
-      this.sheet = spreadsheet.insertSheet();
-      this.sheet.setName(name);
+      this.sheet = spreadsheet.insertSheet(name);
       this.sheet.hideSheet();
     }
     return this;

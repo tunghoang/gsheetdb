@@ -1,5 +1,6 @@
 interface SpreadSheetDBOptions {
-  source_url: string,
+  accessToken: string,
+  spreadsheetId: string,
   sheetSpecs?: object,
   header_row?: number
   id_column?: string,
