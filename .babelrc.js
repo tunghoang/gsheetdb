@@ -8,7 +8,6 @@ module.exports = {
         }
       }
     ],
-    "minify",
   ],
   compact: true,
   minified: true,

@@ -105,8 +105,8 @@ class Sheet {
   getDataRange() {
     return this.getRange(`A1:${colNumberToLabel(this.getLastColumn())}`);
   }
-  appendRow(rows) {
-    apiService.post(`/values/${this.properties.title}:append?valueInputOption=USER_ENTERED`, { values: rows });
+  appendRow(row) {
+    apiService.post(`/values/${this.properties.title}:append?valueInputOption=USER_ENTERED`, { values: [row] });
   }
   deleteRow(row) {
     apiService.post(`/values:batchClear`, { ranges: [`${this.properties.title}!A${row}:${colNumberToLabel(this.getLastColumn)}${row}`] });
