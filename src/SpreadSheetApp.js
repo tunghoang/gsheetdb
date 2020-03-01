@@ -11,7 +11,6 @@ export default class SpreadSheetApp {
     if (typeof ignoreCache !== 'boolean' || ignoreCache === false) {
       const scriptCache = CacheService.getScriptCache();
       const cached = JSON.parse(scriptCache.get('cached' + id));
-      console.log(cached);
       if (cached) {
         return new SpreadSheet(cached);
       }
@@ -122,7 +121,7 @@ class Range {
     return res.values || [];
   }
   getValue() {
-    return this.getValues()[0];
+    return this.getValues()[0][0];
   }
   setValue(value) {
     this.setValues([[value]]);

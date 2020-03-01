@@ -1,4 +1,4 @@
-module.exports = {
+module.exports = api => ({
   presets: [
     [
       "@babel/preset-env",
@@ -9,7 +9,8 @@ module.exports = {
       }
     ],
   ],
-  compact: true,
-  minified: true,
+  compact: api.env("production"),
+  minified: api.env("production"),
   comments: false,
 }
+)
