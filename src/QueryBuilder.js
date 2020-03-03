@@ -21,6 +21,9 @@ class QueryBuilder {
       value = cmp;
       cmp = '=';
     }
+    if (value instanceof Date) {
+      value = value.toISOString();
+    }
     this._append_where(col_name, cmp, value, 'AND', raw);
 
     return this;

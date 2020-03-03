@@ -108,7 +108,16 @@ class Sheet {
     apiService.post(`/values/${this.properties.title}:append?valueInputOption=USER_ENTERED`, { values: [row] });
   }
   deleteRow(row) {
-    apiService.post(`/values:batchClear`, { ranges: [`${this.properties.title}!A${row}:${colNumberToLabel(this.getLastColumn)}${row}`] });
+    this.SpreadSheet.batchUpdate({
+      deleteDimension: {
+        range: {
+          dimension: "ROWS",
+          sheetId: this.id,
+          startIndex: row - 1,
+          endIndex: row,
+        }
+      }
+    })
   }
 }
 class Range {

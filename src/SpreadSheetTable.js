@@ -119,6 +119,9 @@ class SpreadsheetTable {
   }
   insert(rec) {
     if (!rec) throw 'Nothing to insert';
+    for (const key in rec) {
+      rec[key] = rec[key].toISOString();
+    }
     let row = this.options.column_names.jsonToRow(rec);
     this.sheet.appendRow(row);
     return true;
