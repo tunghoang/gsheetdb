@@ -5,24 +5,18 @@ export default class SpreadSheetApp {
   constructor(accessToken) {
     this.accessToken = accessToken;
   }
-  openById(id, ignoreCache) {
+  openById(id) {
     apiService = new ApiService(this.accessToken, 'https://sheets.googleapis.com/v4/spreadsheets/' + id);
-    let metadata;
-    if (typeof ignoreCache !== 'boolean' || ignoreCache === false) {
-      const scriptCache = CacheService.getScriptCache();
-      const cached = JSON.parse(scriptCache.get('cached' + id));
-      if (cached) {
-        return new SpreadSheet(cached);
-      }
-    }
-    metadata = apiService.get('');
-    const scriptCache = CacheService.getScriptCache();
-    scriptCache.put('cached' + id, JSON.stringify({ ...metadata, properties: {} }), 21600);
+    const metadata = apiService.get('');
+    return new SpreadSheet(metadata);
+  }
+  openByData(metadata) {
+    apiService = new ApiService(this.accessToken, 'https://sheets.googleapis.com/v4/spreadsheets/' + metadata.spreadsheetId);
     return new SpreadSheet(metadata);
   }
 }
 
-class SpreadSheet {
+export class SpreadSheet {
   constructor(data) {
     // ({
     //   spreadsheetId: '',
@@ -50,9 +44,15 @@ class SpreadSheet {
   getSheets() {
     return this.data.sheets.map(s => new Sheet(s));
   }
-  insertSheet(title) {
-    const res = this.batchUpdate({ addSheet: { properties: { title } } });
-    return new Sheet(res.addSheet, this);
+  insertSheet(title, properties) {
+    const res = this.batchUpdate({ addSheet: { properties: { title, ...properties } } });
+    return new Sheet(res[0].addSheet, this);
+  }
+  deleteSheet(sheet) {
+    this.batchUpdate({ deleteSheet: { sheetId: sheet.id } });
+  }
+  deleteSheets(sheetIds) {
+    this.batchUpdate(sheetIds.map(id => ({ deleteSheet: { sheetId: id } })));
   }
 }
 
@@ -90,6 +90,9 @@ class Sheet {
   }
   getName() {
     return this.properties.title;
+  }
+  getSheetId() {
+    return this.id;
   }
   getRange(rowOrA1Notation, col, numRows, numCols) {
     let a1Notation;

@@ -74,7 +74,7 @@ class SpreadsheetTable {
 
     let formula = make_match_formula(id, column, this.sheet.getName());
 
-    let hidden_sheet = createHiddenSheet(this.spreadsheet, this.sheet.getName() + '_search_sheet');
+    let hidden_sheet = createHiddenSheet(this.spreadsheet, this.sheet.getName() + '_search_' + Date.now());
     let row = hidden_sheet.runFormula(formula);
     return row;
   }

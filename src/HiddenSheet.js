@@ -4,10 +4,10 @@ class HiddenSheet {
     this.create(spreadsheet, name);
   }
   create(spreadsheet, name) {
+    this.spreadsheet = spreadsheet;
     this.sheet = spreadsheet.getSheetByName(name);
     if (!this.sheet) {
-      this.sheet = spreadsheet.insertSheet(name);
-      this.sheet.hideSheet();
+      this.sheet = spreadsheet.insertSheet(name, { hidden: true });
     }
     return this;
   }
