@@ -63,7 +63,7 @@ class QueryBuilder {
   }
   runQuery(numRows) {
     let qry = this.rawQuery ? `"${this.rawQuery}"` : JSON.stringify(this.getQuery());
-    let hidden_sheet = createHiddenSheet(this.spreadsheet, this.sheet.getName() + '_query_' + Date.now());
+    let hidden_sheet = createHiddenSheet(this.spreadsheet, this.sheet.getName() + '_query');
     let last_col_label = this.options.column_names.getLastColLabel();
     let colref = "'" + this.sheet.getName() + "'!" + 'A' + ':' + last_col_label;
     let formula = `QUERY(${colref},${qry}, 1)`;

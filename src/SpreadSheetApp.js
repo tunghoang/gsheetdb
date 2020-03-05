@@ -41,6 +41,11 @@ export class SpreadSheet {
     if (!sheetData) return null;
     return new Sheet(sheetData, this);
   }
+  getSheetsByName(sheetName) {
+    const sheetsData = this.data.sheets.filter(s => s.properties.title.includes(sheetName));
+    if (!sheetsData.length) return [];
+    return sheetsData.map(sheetData => new Sheet(sheetData, this));
+  }
   getSheets() {
     return this.data.sheets.map(s => new Sheet(s));
   }

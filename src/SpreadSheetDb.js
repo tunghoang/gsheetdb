@@ -31,27 +31,20 @@ class SpreadSheetDB {
       }
     }
     const scriptCache = CacheService.getScriptCache();
-    const sheetId = this.options.spreadsheetId;
+    const spreadsheetId = this.options.spreadsheetId;
     if (!init) {
-      const cached = JSON.parse(scriptCache.get('cached' + sheetId));
+      const cached = JSON.parse(scriptCache.get('cached' + spreadsheetId));
       if (cached) {
         this.spreadsheet = new SpreadSheetApp(this.options.accessToken).openByData(cached);
       }
     }
     if (!this.spreadsheet) {
-      this.spreadsheet = new SpreadSheetApp(this.options.accessToken).openById(sheetId);
+      this.spreadsheet = new SpreadSheetApp(this.options.accessToken).openById(spreadsheetId);
+      scriptCache.put('cached' + spreadsheetId, JSON.stringify({ ...this.spreadsheet.data, properties: {} }), 21600);
     }
     if (!init || !this.spreadsheet) return;
     console.log('spreadsheet reinit');
-    const sheets = this.spreadsheet.getSheets();
-    const sheetSpecNames = Object.keys(this.options.sheetSpecs);
-    const idsToDelete = [];
-    for (const sheet of sheets) {
-      if (sheetSpecNames.includes(sheet.getName())) continue;
-      idsToDelete.push(sheet.getSheetId());
-    }
-    this.spreadsheet.deleteSheets(idsToDelete);
-    const sheetNames = sheets.map(s => s.getName());
+    const sheetNames = this.spreadsheet.getSheets().map(s => s.getName());
     for (const sheetName in this.options.sheetSpecs) {
       if (sheetNames.includes(sheetName)) continue;
       const sheetSpec = this.options.sheetSpecs[sheetName];
@@ -64,9 +57,7 @@ class SpreadSheetDB {
         newSheet.appendRow(sheetSpec);
       }
     }
-    const spreadsheet = new SpreadSheetApp(this.options.accessToken).openById(sheetId);
-    scriptCache.put('cached' + sheetId, JSON.stringify({ ...spreadsheet.data, properties: {} }), 3600);
-    CacheService.getScriptCache().put('init' + this.options.spreadsheetId, 'false', 3600);
+    scriptCache.put('init' + this.options.spreadsheetId, 'false', 21600);
   }
 
   from(sheetName) {
