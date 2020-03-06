@@ -40,7 +40,9 @@ class SpreadSheetDB {
     }
     if (!this.spreadsheet) {
       this.spreadsheet = new SpreadSheetApp(this.options.accessToken).openById(spreadsheetId);
-      scriptCache.put('cached' + spreadsheetId, JSON.stringify({ ...this.spreadsheet.data, properties: {} }), 21600);
+      if (!init) {
+        scriptCache.put('cached' + spreadsheetId, JSON.stringify({ ...this.spreadsheet.data, properties: {} }), 21600);
+      }
     }
     if (!init || !this.spreadsheet) return;
     console.log('spreadsheet reinit');
@@ -57,6 +59,8 @@ class SpreadSheetDB {
         newSheet.appendRow(sheetSpec);
       }
     }
+    this.spreadsheet = new SpreadSheetApp(this.options.accessToken).openById(spreadsheetId);
+    scriptCache.put('cached' + spreadsheetId, JSON.stringify({ ...this.spreadsheet.data, properties: {} }), 21600);
     scriptCache.put('init' + this.options.spreadsheetId, 'false', 21600);
   }
 

@@ -32,13 +32,7 @@ class HiddenSheets {
     this.sheets = spreadsheet.getSheetsByName(name);
     if (this.sheets.length < this.numSheets) {
       this.sheet = spreadsheet.insertSheet(name + new Date().getMilliseconds(), { hidden: true });
-      const scriptCache = CacheService.getScriptCache();
-      const cached = JSON.parse(scriptCache.get('cached' + spreadsheet.id));
-      if (cached) {
-        cached.sheets.push({ properties: this.sheet.properties });
-        spreadsheet.data = cached;
-        scriptCache.put('cached' + spreadsheet.id, JSON.stringify(cached), 21600);
-      }
+      CacheService.getScriptCache().remove('cached' + spreadsheet.id);
     } else {
       this.sheet = this.sheets[Math.floor(Math.random() * this.numSheets)];
     }
